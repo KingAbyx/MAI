@@ -22,8 +22,14 @@ bot = commands.Bot(
 )
 
 global model
+global histories_folder
+histories_folder = "message_histories"
 global message_histories
 message_histories = {}
+global token_limit
+token_limit = 200
+global message_limit
+message_limit = 100
 
 
 @bot.event
@@ -70,18 +76,72 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
     return response.json()['choices'][0]
 
 
+@bot.command(name="setup")
+async def setup(ctx: commands.Context, system, user, assistant):
+    server_id = str(ctx.guild.id)
+    if server_id not in message_histories:
+        message_histories[server_id] = ServerMessageHistory(server_id, histories_folder, message_limit)
+
+    server_history = message_histories[server_id]
+    server_history.frame = [{"role": "system", "content": system},
+                            {"role": "user", "content": user},
+                            {"role": "assistant", "content": assistant}]
+    server_history.save_frame_messages()
+
+    await ctx.channel.send("Setup complete!")
+
+
+@bot.command(name="edit")
+async def edit(ctx: commands.Context, change, value):
+    server_id = str(ctx.guild.id)
+    if server_id not in message_histories:
+        await ctx.channel.send("Setup wasn't completed!")
+        return
+
+    server_history = message_histories[server_id]
+    match change:
+        case "system":
+            server_history.frame[0]["content"] = value
+            await ctx.channel.send(f"System message was changed to: {value}")
+        case "user":
+            server_history.frame[1]["content"] = value
+            await ctx.channel.send(f"User message was changed to: {value}")
+        case "assistant":
+            server_history.frame[2]["content"] = value
+            await ctx.channel.send(f"Assistant message was changed to: {value}")
+        case other:
+            await ctx.channel.send("Syntax Error!")
+            return
+    server_history.save_frame_messages()
+    server_history.save_message_history()
+    message_histories.pop(server_id)
+    load_server_from_storage(server_id)
+    return
+
+
+def load_server_from_storage(server_id):
+    if server_id in message_histories:
+        return True
+    elif os.path.exists(os.path.join(histories_folder, f'{server_id}_history.json')) and os.path.exists(os.path.join(histories_folder, f'{server_id}_frame.json')):
+        message_histories[server_id] = ServerMessageHistory(server_id, histories_folder, message_limit)
+        return True
+    else:
+        return False
+
+
 @bot.command(name="M")
 async def hey_mai(ctx: commands.Context):
     content = ctx.author.name + ": " + ctx.message.content[len(ctx.prefix) + len(ctx.invoked_with):].strip()
 
     server_id = str(ctx.guild.id)
-    if server_id not in message_histories:
-        message_histories[server_id] = ServerMessageHistory(server_id)
+    if not load_server_from_storage(server_id):
+        await ctx.channel.send("Setup not completed!")
+        return
 
     server_history = message_histories[server_id]
     server_history.add_message({"role": "user", "content": content})
 
-    messages = [{"role": "system", "content": "You are a member of a discord server and trying to fit in"}]
+    messages = server_history.frame
     messages.extend(server_history.message_history)
 
     response = call_openai_api_using_requests(model, messages)

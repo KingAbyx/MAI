@@ -148,5 +148,7 @@ cython_debug/
 
 !/API_key
 !/gpt_key
-!/discord_key
+!/discord_key_mai
 !/message_histories/
+!/discord_key_mai
+!/discord_key
