@@ -67,7 +67,7 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
         'messages': messages,
         'max_tokens': max_tokens,
         'n': n,
-        'stop': stop
+        'stop': stop,
         'temperature': 0.4
     }
 
