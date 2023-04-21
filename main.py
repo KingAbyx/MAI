@@ -73,7 +73,7 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
     response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, data=json.dumps(data))
     print("Response status code:", response.status_code)
     print("Response content:", response.json())
-    return response.json()
+    return response
 
 
 @bot.command(name="setup")
@@ -154,7 +154,7 @@ async def hey_mai(ctx: commands.Context):
         error_message = error_data.get("error", {}).get("message", None)
         await ctx.send(f"API call failed with error code: {error_code}, message: {error_message}")
 
-    response = response['choices'][0]
+    response = response.json()['choices'][0]
     reply = response['message']['content']
 
     server_history.add_message({"role": "assistant", "content": reply})
