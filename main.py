@@ -29,7 +29,7 @@ message_histories = {}
 global token_limit
 token_limit = 200
 global message_limit
-message_limit = 100
+message_limit = 50
 
 
 @bot.event
