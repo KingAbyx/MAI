@@ -68,6 +68,7 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
         'max_tokens': max_tokens,
         'n': n,
         'stop': stop
+        'temperature': 0.4
     }
 
     response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, data=json.dumps(data))
