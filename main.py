@@ -144,7 +144,7 @@ async def hey_mai(ctx: commands.Context):
     messages = server_history.frame
     messages.extend(server_history.message_history)
     # more fucking framing
-    messages.extend(server_history.frame[2])
+    messages.insert(len(messages - 1), server_history.frame[2])
 
     response = call_openai_api_using_requests(model, messages)
 
