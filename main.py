@@ -148,6 +148,7 @@ async def hey_mai(ctx: commands.Context):
     response = call_openai_api_using_requests(model, messages)
 
     while response.status_code == "400":
+        print("Trimming history by two, trying API call again")
         server_history.trim_message_history(False)
         server_history.trim_message_history(False)
 
@@ -161,6 +162,7 @@ async def hey_mai(ctx: commands.Context):
         error_data = response.json()
         error_code = error_data.get("error", {}).get("code", None)
         error_message = error_data.get("error", {}).get("message", None)
+        print(f"API call failed with error code: {error_code}, message: {error_message}")
         await ctx.send(f"API call failed with error code: {error_code}, message: {error_message}")
         server_history.trim_message_history(True)
         return
