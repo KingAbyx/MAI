@@ -3,7 +3,7 @@ import json
 
 
 class ServerMessageHistory:
-    def __init__(self, server_id, folder_name,):
+    def __init__(self, server_id, folder_name):
         self.folder_name = folder_name
         self.server_id = server_id
 
