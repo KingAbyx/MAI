@@ -147,7 +147,7 @@ async def hey_mai(ctx: commands.Context):
 
     response = call_openai_api_using_requests(model, messages)
 
-    while response.status_code == "400":
+    while response.status_code == 400:
         print("Trimming history by two, trying API call again")
         server_history.trim_message_history(False)
         server_history.trim_message_history(False)
