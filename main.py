@@ -27,8 +27,6 @@ global message_histories
 message_histories = {}
 global token_limit
 token_limit = 200
-global message_limit
-message_limit = 50
 
 
 @bot.event
@@ -80,7 +78,7 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
 async def setup(ctx: commands.Context, system, user, assistant):
     server_id = str(ctx.guild.id)
     if server_id not in message_histories:
-        message_histories[server_id] = ServerMessageHistory(server_id, histories_folder, message_limit)
+        message_histories[server_id] = ServerMessageHistory(server_id, histories_folder)
 
     server_history = message_histories[server_id]
     server_history.frame = [{"role": "system", "content": system},
@@ -123,7 +121,7 @@ def load_server_from_storage(server_id):
     if server_id in message_histories:
         return True
     elif os.path.exists(os.path.join(histories_folder, f'{server_id}_history.json')) and os.path.exists(os.path.join(histories_folder, f'{server_id}_frame.json')):
-        message_histories[server_id] = ServerMessageHistory(server_id, histories_folder, message_limit)
+        message_histories[server_id] = ServerMessageHistory(server_id, histories_folder)
         return True
     else:
         return False

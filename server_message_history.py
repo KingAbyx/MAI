@@ -3,14 +3,13 @@ import json
 
 
 class ServerMessageHistory:
-    def __init__(self, server_id, folder_name, message_limit):
-        self.folder_name = "message_histories"
+    def __init__(self, server_id, folder_name,):
+        self.folder_name = folder_name
         self.server_id = server_id
 
         self.history_filename = os.path.join(self.folder_name, f"{self.server_id}_history.json")
         self.create_folder_if_not_exists()
         self.message_history = self.load_message_history()
-        self.message_limit = 150
 
         self.frame_filename = os.path.join(self.folder_name, f"{self.server_id}_frame.json")
         self.frame = self.load_frame()
