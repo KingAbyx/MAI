@@ -5,7 +5,6 @@ import json
 import os
 import openai
 import requests
-import server_message_history
 from server_message_history import ServerMessageHistory
 
 intents = discord.Intents.default()
@@ -67,7 +66,7 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
         'messages': messages,
         'max_tokens': max_tokens,
         'n': n,
-        'stop': stop
+        'stop': stop,
         'temperature': 0.4
     }
 
@@ -144,16 +143,22 @@ async def hey_mai(ctx: commands.Context):
 
     messages = server_history.frame
     messages.extend(server_history.message_history)
-    # more fucking framing
     messages.insert(len(messages) - 1, server_history.frame[2])
 
     response = call_openai_api_using_requests(model, messages)
+
+    while response.status_code == "400":
+        server_history.trim_message_history(False)
+        server_history.trim_message_history(False)
+        response = call_openai_api_using_requests(model, messages)
 
     if not response.status_code == 200:
         error_data = response.json()
         error_code = error_data.get("error", {}).get("code", None)
         error_message = error_data.get("error", {}).get("message", None)
         await ctx.send(f"API call failed with error code: {error_code}, message: {error_message}")
+        server_history.trim_message_history(True)
+        return
 
     response = response.json()['choices'][0]
     reply = response['message']['content']

@@ -40,8 +40,10 @@ class ServerMessageHistory:
         self.trim_message_history()
         self.save_message_history()
 
-    def trim_message_history(self):
-        if len(self.message_history) > self.message_limit:
+    def trim_message_history(self, top):
+        if top:
+            self.message_history.pop()
+        else:
             self.message_history.pop(0)
 
     def save_message_history(self):
@@ -51,3 +53,4 @@ class ServerMessageHistory:
     def save_frame_messages(self):
         with open(self.frame_filename, "w") as f:
             json.dump(self.frame, f, indent=2)
+
