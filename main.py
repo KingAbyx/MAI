@@ -150,6 +150,11 @@ async def hey_mai(ctx: commands.Context):
     while response.status_code == "400":
         server_history.trim_message_history(False)
         server_history.trim_message_history(False)
+
+        messages = server_history.frame
+        messages.extend(server_history.message_history)
+        messages.insert(len(messages) - 1, server_history.frame[2])
+
         response = call_openai_api_using_requests(model, messages)
 
     if not response.status_code == 200:
