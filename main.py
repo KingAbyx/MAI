@@ -86,6 +86,7 @@ async def setup(ctx: commands.Context, system, user, assistant):
                             {"role": "assistant", "content": assistant}]
     server_history.save_frame_messages()
 
+    print("Setup complete!")
     await ctx.channel.send("Setup complete!")
 
 
@@ -114,10 +115,12 @@ async def edit(ctx: commands.Context, change, value):
     server_history.save_message_history()
     message_histories.pop(server_id)
     load_server_from_storage(server_id)
+    print("Frame edited!")
     return
 
 
 def load_server_from_storage(server_id):
+    print("Server data loaded from Storage!")
     if server_id in message_histories:
         return True
     elif os.path.exists(os.path.join(histories_folder, f'{server_id}_history.json')) and os.path.exists(os.path.join(histories_folder, f'{server_id}_frame.json')):

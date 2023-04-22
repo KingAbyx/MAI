@@ -30,6 +30,7 @@ class ServerMessageHistory:
             with open(self.frame_filename, "r") as f:
                 return json.load(f)
         else:
+            # These aren't actually ever used, just an example and a quick way to catch coding errors
             return [{"role": "system", "content": "You are an angry barabarian who likes to scream and shout all the time"},
                     {"role": "user", "content": "What's up, pal?"},
                     {"role": "assistant", "content": "AAAAH, how dare you speak to me, puny weakling AAAAAA"}]
