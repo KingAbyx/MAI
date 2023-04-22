@@ -142,7 +142,7 @@ async def hey_mai(ctx: commands.Context):
     server_history = message_histories[server_id]
     server_history.add_message({"role": "user", "content": content})
 
-    messages = server_history.frame + server_history.message_history + [server_history.frame[2]]
+    messages = server_history.frame + server_history.message_history + [server_history.frame[0]]
 
     response = call_openai_api_using_requests(model, messages)
 
@@ -151,7 +151,7 @@ async def hey_mai(ctx: commands.Context):
         server_history.trim_message_history(False)
         server_history.trim_message_history(False)
 
-        messages = server_history.frame + server_history.message_history + [server_history.frame[2]]
+        messages = server_history.frame + server_history.message_history + [server_history.frame[0]]
 
         response = call_openai_api_using_requests(model, messages)
 
