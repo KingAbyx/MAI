@@ -67,7 +67,7 @@ def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, st
         'max_tokens': max_tokens,
         'n': n,
         'stop': stop,
-        'temperature': 0.4
+        'temperature': 0.8
     }
 
     response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, data=json.dumps(data))
@@ -141,9 +141,7 @@ async def hey_mai(ctx: commands.Context):
     server_history = message_histories[server_id]
     server_history.add_message({"role": "user", "content": content})
 
-    messages = server_history.frame
-    messages.extend(server_history.message_history)
-    messages.insert(len(messages) - 1, server_history.frame[2])
+    messages = server_history.frame + server_history.message_history + [server_history.frame[2]]
 
     response = call_openai_api_using_requests(model, messages)
 
@@ -152,9 +150,7 @@ async def hey_mai(ctx: commands.Context):
         server_history.trim_message_history(False)
         server_history.trim_message_history(False)
 
-        messages = server_history.frame
-        messages.extend(server_history.message_history)
-        messages.insert(len(messages) - 1, server_history.frame[2])
+        messages = server_history.frame + server_history.message_history + [server_history.frame[2]]
 
         response = call_openai_api_using_requests(model, messages)
 
