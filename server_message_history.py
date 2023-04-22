@@ -37,7 +37,6 @@ class ServerMessageHistory:
 
     def add_message(self, message):
         self.message_history.append(message)
-        self.trim_message_history()
         self.save_message_history()
 
     def trim_message_history(self, top):
