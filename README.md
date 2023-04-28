@@ -1,5 +1,4 @@
 # MAI
-A little AI discord member
 MAI is a dicord bot that uses the OpenAI api to generate responses. The idea is to have fully fledged discord server member that is fully AI powered.
 
 Current Features:
