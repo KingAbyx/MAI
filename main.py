@@ -34,7 +34,6 @@ async def on_ready():
     print(f"{bot.user} powered on!")
     with open('gpt_key', 'r') as f:
         gpt_key = f.read()
-    # openai.organization("org-MLRPYyDJ6C8XJ64r1DulvAI1")
     openai.api_key = gpt_key
     global model
     model = "gpt-3.5-turbo"
