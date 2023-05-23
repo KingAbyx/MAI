@@ -199,6 +199,17 @@ async def remove_replied_message_pair(ctx: commands.Context):
     except ValueError as e:
         await ctx.channel.send(str(e))
 
+@bot.command(name="clear_history")
+async def clear_history(ctx: commands.Context):
+    server_id = str(ctx.guild.id)
+    if not load_server_from_storage(server_id):
+        await ctx.channel.send("Setup not completed!")
+        return
+
+    server_history = message_histories[server_id]
+    server_history.clear_message_history()
+    await ctx.channel.send("Server history has been cleared.")
+
 
 with open('discord_key', 'r') as f:
     discord_key = f.read()
