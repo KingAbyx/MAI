@@ -55,6 +55,7 @@ class ServerMessageHistory:
 
     def clear_message_history(self):
         self.message_history.clear()
+        print(f'Message history of {self.server_id} deleted!')
 
     def remove_message_pair_by_text(self, assistant_message_text):
         indices = [i for i, message in enumerate(self.message_history) if

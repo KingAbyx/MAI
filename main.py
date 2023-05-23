@@ -199,6 +199,7 @@ async def remove_replied_message_pair(ctx: commands.Context):
     except ValueError as e:
         await ctx.channel.send(str(e))
 
+
 @bot.command(name="clear_history")
 async def clear_history(ctx: commands.Context):
     server_id = str(ctx.guild.id)
