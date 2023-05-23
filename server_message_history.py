@@ -53,3 +53,26 @@ class ServerMessageHistory:
         with open(self.frame_filename, "w") as f:
             json.dump(self.frame, f, indent=2)
 
+    def remove_message_pair_by_index(self, index):
+        if index < 1 or index >= len(self.message_history):
+            raise ValueError("Invalid index for message removal.")
+
+        self.message_history.pop(index)
+        self.message_history.pop(index - 1)
+
+    def remove_message_pair_by_text(self, assistant_message_text):
+        indices = [i for i, message in enumerate(self.message_history) if
+                   message['role'] == 'assistant' and message['content'] == assistant_message_text]
+
+        if not indices:
+            raise ValueError("The specified assistant message text was not found in the message history.")
+
+        # Take the first matching pair
+        index = indices[0]
+
+        if index == 0:
+            raise ValueError("The first message in the history cannot be removed with this method.")
+
+        self.message_history.pop(index)
+        self.message_history.pop(index - 1)
+

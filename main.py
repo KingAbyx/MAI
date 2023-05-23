@@ -171,6 +171,35 @@ async def hey_mai(ctx: commands.Context):
     await ctx.channel.send(reply)
 
 
+@bot.command(name="remove")
+async def remove_replied_message_pair(ctx: commands.Context):
+    if ctx.message.reference is None or ctx.message.reference.resolved is None:
+        await ctx.send("You must reply to a message to use this command.")
+        return
+
+    server_id = str(ctx.guild.id)
+    if not load_server_from_storage(server_id):
+        await ctx.channel.send("Setup not completed!")
+        return
+
+    server_history = message_histories[server_id]
+
+    replied_message_content = ctx.message.reference.resolved.content
+    message_index = next((i for i, message in enumerate(server_history.message_history) if
+                          message['role'] == 'assistant' and message['content'] == replied_message_content), None)
+
+    if message_index is None:
+        await ctx.send("Could not find the replied-to message in the stored message history.")
+        return
+
+    try:
+        server_history.remove_message_pair_by_index(message_index)
+        await ctx.channel.send(
+            f"Successfully removed message pair!")
+    except ValueError as e:
+        await ctx.channel.send(str(e))
+
+
 with open('discord_key', 'r') as f:
     discord_key = f.read()
 bot.run(discord_key)
