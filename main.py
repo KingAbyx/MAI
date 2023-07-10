@@ -26,7 +26,7 @@ histories_folder = "message_histories"
 global message_histories
 message_histories = {}
 global token_limit
-token_limit = 200
+token_limit = 800
 
 
 @bot.event
