@@ -36,7 +36,7 @@ async def on_ready():
         gpt_key = f.read()
     openai.api_key = gpt_key
     global model
-    with open('model', 'r') as f:
+    with open('model_file', 'r') as f:
         model = f.read()
 
 
