@@ -172,7 +172,7 @@ async def hey_mai(ctx: commands.Context):
     if len(reply) > mml:
         replies = list()
         for i in range(int(len(reply)/mml)):
-            replies.append(reply[mml*i:min(mml*(i+1), len(reply)-1])
+            replies.append(reply[mml*i:min(mml*(i+1), len(reply)-1)])
         for rep in replies:
             await ctx.channel.send(rep)
             time.sleep(1)
