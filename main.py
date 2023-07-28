@@ -174,6 +174,7 @@ async def hey_mai(ctx: commands.Context):
             replies.append(reply[mml*i:mml*(i+1)])
         for rep in replies:
             await ctx.channel.send(rep)
+            time.sleep(1)
     else:
         await ctx.channel.send(reply)
 
