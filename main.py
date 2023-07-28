@@ -36,8 +36,7 @@ async def on_ready():
         gpt_key = f.read()
     openai.api_key = gpt_key
     global model
-    with open('model_file', 'r') as f:
-        model = f.read()
+    model = "gpt-3.5-turbo"
 
 
 def call_openai_api_using_lib(model_call, messages, max_tokens=200, n=1, stop=None):
