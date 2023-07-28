@@ -39,7 +39,7 @@ async def on_ready():
     model = "gpt-3.5-turbo"
 
 
-def call_openai_api_using_lib(model_call, messages, max_tokens=200, n=1, stop=None):
+def call_openai_api_using_lib(model_call, messages, max_tokens=token_limit, n=1, stop=None):
     response = openai.ChatCompletion.create(
         engine=model_call,
         messages=messages,
