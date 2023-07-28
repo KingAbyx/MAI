@@ -52,7 +52,7 @@ def call_openai_api_using_lib(model_call, messages, max_tokens=token_limit, n=1,
     return response.choices[0].to_dict()
 
 
-def call_openai_api_using_requests(model_call, messages, max_tokens=200, n=1, stop=None):
+def call_openai_api_using_requests(model_call, messages, max_tokens=token_limit, n=1, stop=None):
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {openai.api_key}'
