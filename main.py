@@ -167,8 +167,15 @@ async def hey_mai(ctx: commands.Context):
     reply = response['message']['content']
 
     server_history.add_message({"role": "assistant", "content": reply})
-
-    await ctx.channel.send(reply)
+    mml = 1900 #max_message_length
+    if len(reply) > mml:
+        replies = list()
+        for i in range(int(len(reply)/mml)):
+            replies.append(reply[mml*i:mml*(i+1)])
+        for rep in replies:
+            await ctx.channel.send(rep)
+    else:
+        await ctx.channel.send(reply)
 
 
 @bot.command(name="remove")
